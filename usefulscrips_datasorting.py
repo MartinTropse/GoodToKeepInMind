@@ -23,6 +23,8 @@ plt.show()
 #clear terminal on windows ipython
 !CLS
 #
+
+I wonder if I can sync this file with Github? That would be amazing!
 '''
 # =============================================================================
 # OS Module
@@ -34,8 +36,15 @@ os.path.getctime(r"C:\Py3\Boxholm\0560-60-001_2018_1.pdf") #Check creation time
 os.path.getmtime(r"C:\Py3\Boxholm\0560-60-001_2018_1.pdf") #Check modified time
 os.path.getsize(r"C:\Py3\Boxholm\0560-60-001_2018_1.pdf")/1000000 #Gives bites value of the file 
 
+numList = [1,2,3,4,5,6,7,8]
+valList = ["myList", "theList", "fellowTist"]
 
-#####DATASORTING#####
+
+aList = [list(filter(lambda x: "List" in x,valList))]
+
+
+
+#####DATASORTING#####01
 #Gives summary of counts/shape, mean, median and quartiles
 df.describe()
 
