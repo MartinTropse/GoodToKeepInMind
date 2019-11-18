@@ -18,22 +18,24 @@ import os
 
 
 try:
-    api = SentinelAPI('johnjernberg', '#Jobbar', 'https://scihub.copernicus.eu/dhus')
+    api = SentinelAPI('johnjernberg', 'Lansstyrelsen', 'https://scihub.copernicus.eu/dhus')
     print("API connected")
 except:
     print("API Error")
 
 products = api.query(
-               date=('20180402', '20180403'),
+               date=('20180712', '20180715'),
                   platformname='Sentinel-2', producttype='S2MSI2A',
-                   cloudcoverpercentage=(0, 10))
-    
+                   cloudcoverpercentage=(0, 40))
+
+
 products_df = api.to_dataframe(products)
 
 dftile = products_df[products_df['filename'].str.contains("T33VWF")]
 
 print(dftile.ingestiondate)
-os.chdir('C:/Users/jernb/Desktop/Python/Sentinel2')
+os.chdir(r'C:\Py\Sentinel')
+
 try:
    api.download_all(dftile.index)
    print("Download complete")

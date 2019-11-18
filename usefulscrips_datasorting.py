@@ -643,6 +643,92 @@ for i in forecast_set:
     #Okay mindf*** 2.0. So for each new row, which is built with next_date, he adds for np.nan for each column except the last one, which get the value i instead
     #Good syntax by the way of how to build new rows with data
     
+
     
+
+# =============================================================================
+# Playing With Dictonarities
+# =============================================================================
+"""
+Definition 
+Dictionary in Python is an unordered collection of data values, used to store data values like a map, 
+which unlike other Data Types that hold only single value as an element, Dictionary holds key:value pair. 
+Key value is provided in the dictionary to make it more optimized. Each key-value pair in a Dictionary is separated by a colon :, 
+whereas each key is separated by a ‘comma’. A Dictionary in Python works similar to the Dictionary in a real world. 
+Keys of a Dictionary must be unique and of immutable data type such as Strings, Integers and tuples, but the key-values can be repeated and be of any type.
+"""
+
+from random import random
+from random import seed
+from random import randint
+import pandas as pd
+
+seed(4)
+#Create dictionary
+aDict = {"Martin":21, "Kristy":25, "Juni":41, "Sara":14, "Jonny":21.4}
+aDict['Kristy']=aDict["Kristy"]+1
+newDict = {}
+
+#Loop through values
+for x in aDict.values():
+    print(x)
+
+#Loop through keys and add 19 to the values of keys containing "uni"
+for x in aDict.keys():
+    if "uni" in x:
+        aDict[x]=int(aDict[x])+19
+        print(aDict)
+        
+#Create a new dictionary based on key hits in base dictionary 
+for x, y in zip(aDict.keys(), aDict.values()):
+    if "uni" in x:
+        newDict[x]=y
+
+#Set multiple values per key through list or tuples
+myDict = {"List1": ("value_1", "value_2", "value_3")}
+mylDict = {"List1": ["value_1", "value_2", "value_3"]}
+
+myDict['List1']
+aTuple = (5,10,21)
+value1,value2,value3 = aTuple
+evenNum = []
+
+codeList=["C", "C++", "Java", 1]
+my_dict = {"my_key": [value1, value2, value3]};
+my_dikt = {"my_key": ["C", "C++", "Java"], "my_colors":["Red", "Black", "White", "Blue"]};
+
+for z in my_dikt["my_colors"]:
+    print(z)
     
-    
+print(my_dikt.values())
+
+
+for _ in range(0,100):
+    ri=randint(0,20)
+    if ri % 2==0:
+        print("We call it even!")
+        evenNum.append(ri)
+    else:
+        print("No way!")
+
+#ListComp creating list with 100 values random between -10:10
+randomVal = [randint(-10,10) for _ in range(0,100)]
+evenVal = [x for x in randomVal if x % 2==0]
+theList = ["ABBA", "Beatles"]*20
+randomVal = [randint(-10, 10) for _ in range(0,40)]
+evenVal = [x for x in randomVal if x % 2 == 0]
+oddVal = [x for x in randomVal if x % 2 != 0]
+
+#Creates a dictonary with keys between -10:10 that adds strings to values based on if key is even or not  
+for i in range(-10,11):
+    if i % 2 == 0:
+        aDict[i]="Wow it is so even"
+    else:
+        aDict[i]="Stomp of the century!"
+
+#Create data frame and map the aDict (containing strings connecting to even and odd numbers)
+#to the new columns TheTruth in the dataframe        
+myDataframe = pd.DataFrame(index=range(0,40), columns={"Rock","Value"})
+myDataframe['Rock'] = theList
+myDataframe['Value'] = randomVal
+myDataframe['TheTruth'] = myDataframe['Value'].map(aDict)
