@@ -414,7 +414,7 @@ from datetime import datetime
 dt = datetime.strptime(df.timestamp[0], '%Y-%m-%d %H:%M:%S.%f')
 
 #to convert 20180912, note that %y is used for %
-dt=datetime.strptime(df.timestamp[0]), '%Y%m%d
+dt=datetime.strptime(df.timestamp[0], '%Y%m%d')
 
 
 #to add convert from df:
@@ -732,3 +732,5 @@ myDataframe = pd.DataFrame(index=range(0,40), columns={"Rock","Value"})
 myDataframe['Rock'] = theList
 myDataframe['Value'] = randomVal
 myDataframe['TheTruth'] = myDataframe['Value'].map(aDict)
+
+
