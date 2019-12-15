@@ -702,7 +702,6 @@ for z in my_dikt["my_colors"]:
     
 print(my_dikt.values())
 
-
 for _ in range(0,100):
     ri=randint(0,20)
     if ri % 2==0:
@@ -733,4 +732,128 @@ myDataframe['Rock'] = theList
 myDataframe['Value'] = randomVal
 myDataframe['TheTruth'] = myDataframe['Value'].map(aDict)
 
+
+
+"""===============================================================================
+Generators
+Works similiar to a list but does not fill up memory. The value us being sent
+to memory one by one through the next command. 
+
+Instead of using return, you use yield to get the value back and stored  
+in a generator object.
+
+By using () instead [] the list_comp will yield values into a generator object
+instead of appending them to a list.  
+
+https://www.youtube.com/watch?v=bD05uGo_sVI
+
+==============================================================================="""
+
+from pympler import summary, muppy
+import sys
+import os
+import psutil
+
+def square_numbers(nums):
+    for i in nums:
+        yield (i*i) #Yield is equivalent to return for generators
+
+"""============================================================================= 
+Short script to keep track of memory usage
+============================================================================="""
+my_nums = (x*x for x in [1,2,3,4,5]) #This works same as append but for generators
+print(list(my_nums)) # [1, 4, 9, 16, 25]
+process = psutil.Process(os.getpid())
+print(process.memory_info().rss/ float(2 ** 20))
+
+
+def memory_usage_psutil():
+    # return the memory usage in MB
+    process = psutil.Process(os.getpid())
+    mem = process.memory_info().rss / float(2 ** 20)
+    return mem
+
+#import mem_profile
+import random
+import time
+
+names = ['John', 'Corey', 'Adam', 'Steve', 'Rick', 'Thomas']
+majors = ['Math', 'Engineering', 'CompSci', 'Arts', 'Business']
+
+print('Memory (Before): {}Mb'.format(memory_usage_psutil()))
+
+def people_list(num_people):
+    result = []
+    for i in range(num_people):
+        person = {
+                    'id': i,
+                    'name': random.choice(names), #Random.choice takes random value
+                    'major': random.choice(majors)
+                }
+        result.append(person)
+    return result
+
+def people_generator(num_people):
+    for i in range(num_people):
+        person = {
+                    'id': i,
+                    'name': random.choice(names),
+                    'major': random.choice(majors)
+                }
+        yield person
+
+t1 = time.perf_counter()
+people = people_list(1000000)
+t2 = time.perf_counter()
+t1=time.process_time()
+t2=time.process_time()
+
+#t1 = time.clock()
+#people = people_generator(1000000)
+#t2 = time.clock()
+
+print('Memory (After) : {}Mb'.format(memory_usage_psutil()))
+print('Took {} Seconds'.format(t2-t1))
+
+
+
+"""=============================================================================
+Create and load the pickleObjects
+============================================================================="""
+pickle_out = open("PdfText.pickle", "wb")
+pickle.dump(extracted_text, pickle_out)
+pickle_out.close()
+
+pickle_in = open("PdfText.pickle", "rb")
+extracted_text = pickle.load(pickle_in)
+
+"""=============================================================================
+Git syntax
+============================================================================="""
+git init #To iniate repository
+touch README.md #Create Readme.md
+touch .gitignore #Create .gitignore. /DirName will ignore the given repository
+
+clear #Cleanse console
+git remote add origin "https:/github.com/paths.git" #Adds a remote dir as origin
+git add file.doc
+git rm --cached index.html
+git add . #Adds all files to the "staging area"
+git add *.pdf #adds all pdf files
+
+git status #Shows the current changes and which branch you are in  
+git commit -m "Update" #Will commmit the files that have green status 
+git push u- origin master #Push the master to origin
+git pull u- 
+git clone "https:/github.com/paths.git"
+
+git restore <file> #to discard changes in working directory
+git push
+git pull
+
+git branch mybranch #Creates branch. Note that you have not entered it yet!
+git checkout mybranch #Enters the given branch
+
+#To merge branch switch back master and then...
+git merge mybranch
 
