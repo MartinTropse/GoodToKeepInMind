@@ -454,8 +454,8 @@ pd.merge(left, right, how='inner', on=None, left_on=None, right_on=None,
          validate=None)
 
 #get the count of rows within unique combinations and select row with max
-    comb_count=df.groupby(['Start_Station','End_Station']).size().reset_index().rename(columns={0:'Count'})
-    max_comb=comb_count.loc[comb_count['Count'].idxmax()]
+comb_count=df.groupby(['Start_Station','End_Station']).size().reset_index().rename(columns={0:'Count'})
+max_comb=comb_count.loc[comb_count['Count'].idxmax()]
 
 #Create column with random ID kinda.
 data['id'] = [random.randint(0,1000) for x in range(data.shape[0])]
@@ -830,30 +830,224 @@ extracted_text = pickle.load(pickle_in)
 """=============================================================================
 Git syntax
 ============================================================================="""
-git init #To iniate repository
-touch README.md #Create Readme.md
-touch .gitignore #Create .gitignore. /DirName will ignore the given repository
+# git init #To iniate repository
+# touch README.md #Create Readme.md
+# touch .gitignore #Create .gitignore. /DirName will ignore the given repository
 
-clear #Cleanse console
-git remote add origin "https:/github.com/paths.git" #Adds a remote dir as origin
-git add file.doc
-git rm --cached index.html
-git add . #Adds all files to the "staging area"
-git add *.pdf #adds all pdf files
+# clear #Cleanse console
+# git remote add origin "https:/github.com/paths.git" #Adds a remote dir as origin
+# git add file.doc
+# git rm --cached index.html
+# git add . #Adds all files to the "staging area"
+# git add *.pdf #adds all pdf files
 
-git status #Shows the current changes and which branch you are in  
-git commit -m "Update" #Will commmit the files that have green status 
-git push u- origin master #Push the master to origin
-git pull u- 
-git clone "https:/github.com/paths.git"
+# git status #Shows the current changes and which branch you are in  
+# git commit -m "Update" #Will commmit the files that have green status 
+# git push u- origin master #Push the master to origin
+# git pull u- 
+# git clone "https:/github.com/paths.git"
 
-git restore <file> #to discard changes in working directory
-git push
-git pull
+# git restore <file> #to discard changes in working directory
+# git push
+# git pull
 
-git branch mybranch #Creates branch. Note that you have not entered it yet!
-git checkout mybranch #Enters the given branch
+# git branch mybranch #Creates branch. Note that you have not entered it yet!
+# git checkout mybranch #Enters the given branch
 
-#To merge branch switch back master and then...
-git merge mybranch
+# #To merge branch switch back master and then...
+# git merge mybranch
 
+
+
+"""=============================================================================
+Threading Tutorial 
+============================================================================="""
+#Synchronously: run things by order 
+#Concurrent: Run things in parallel
+
+#I/O band tasks, tasks waiting for input/output, benifit from threading. We want to wait less!
+#Sometimes threading causes a process to run slower, if there is no waiting. 
+#So threading simple keep moving forward in the code will script wait for I/O to return 
+
+#Cpu band tasks, benifit from mulitprocessing
+import time
+import threading #Older way of doing threading
+import concurrent.futures #Current way of doing threading
+
+# t1 = threading.Thread(target=do_something) # A thread object
+# t2 = threading.Thread(target=do_something)
+
+# t1.start()
+# t2.start()
+
+# t1.join() #Will make sure that thread 1 is complete before the script continues
+# t2.join()
+
+start = time.perf_counter()
+
+def do_something(seconds):
+    print(f'Sleeping {seconds} second(s)...')
+    time.sleep(seconds)
+    return f'Done Sleeping...{seconds}'
+
+# threads = []
+    
+# for _ in range(10):
+#     t = threading.Thread(target=do_something, args=[1.5]) #creates argument for do_something
+#     t.start()
+#     threads.append(t)
+    
+# for thread in threads:
+#     thread.join() #This loop is to make sure that all threads finish before continuing
+
+#concurrent module 
+# with concurrent.futures.ThreadPoolExecutor() as executor:
+#     secs = [5,4,3,2,1]
+#     results = [executor.submit(do_something, sec) for sec in secs]   
+#     for f in concurrent.futures.as_completed(results):
+#         print(f.result())
+
+with concurrent.futures.ThreadPoolExecutor() as executor:
+    secs = [5,4,3,2,1]
+    results = executor.map(do_something, secs)   #Map will return values based on when they were cpompleted 
+    #Does not require as_completed function to halt the scripts progress 
+    for result in results:
+        print(result) 
+
+
+finish = time.perf_counter()
+print(f'Finished in {round(finish-start, 2)} seconds(s)')
+
+
+import requests
+import time
+import concurrent.futures
+
+img_urls = [
+    'https://images.unsplash.com/photo-1516117172878-fd2c41f4a759',
+    'https://images.unsplash.com/photo-1532009324734-20a7a5813719',
+    'https://images.unsplash.com/photo-1524429656589-6633a470097c',
+    'https://images.unsplash.com/photo-1530224264768-7ff8c1789d79',
+    'https://images.unsplash.com/photo-1564135624576-c5c88640f235',
+    'https://images.unsplash.com/photo-1541698444083-023c97d3f4b6',
+    'https://images.unsplash.com/photo-1522364723953-452d3431c267',
+    'https://images.unsplash.com/photo-1513938709626-033611b8cc03',
+    'https://images.unsplash.com/photo-1507143550189-fed454f93097',
+    'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e',
+    'https://images.unsplash.com/photo-1504198453319-5ce911bafcde',
+    'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99',
+    'https://images.unsplash.com/photo-1516972810927-80185027ca84',
+    'https://images.unsplash.com/photo-1550439062-609e1531270e',
+    'https://images.unsplash.com/photo-1549692520-acc6669e2f0c'
+]
+
+t1 = time.perf_counter()
+
+
+def download_image(img_url):
+    img_bytes = requests.get(img_url).content
+    img_name = img_url.split('/')[3]
+    img_name = f'{img_name}.jpg'
+    with open(img_name, 'wb') as img_file:
+        img_file.write(img_bytes)
+        print(f'{img_name} was downloaded...')
+
+
+with concurrent.futures.ThreadPoolExecutor() as executor:
+    executor.map(download_image, img_urls)
+
+
+t2 = time.perf_counter()
+
+print(f'Finished in {t2-t1} seconds')
+
+"""=============================================================================
+Multiprocessing Examples 
+============================================================================="""
+https://www.youtube.com/watch?v=fKl2JW_qrso&t=1886s
+import multiprocessing
+import concurrent.futures
+import time
+
+if __name__ == '__main__':
+    main()
+
+start = time.perf_counter()
+
+
+def do_something(seconds):
+    print(f'Sleeping {seconds} second(s)...')
+    time.sleep(seconds)
+    return f'Done Sleeping...{seconds}'
+
+
+with concurrent.futures.ProcessPoolExecutor() as executor:
+    secs = [5, 4, 3, 2, 1]
+    results = executor.map(do_something, secs)
+
+    for result in results:
+         print(result)
+
+finish = time.perf_counter()
+
+print(f'Finished in {round(finish-start, 2)} second(s)')
+
+
+#Multiprocessing implemented on images
+import time
+import concurrent.futures
+from PIL import Image, ImageFilter
+
+img_names = [
+    'photo-1516117172878-fd2c41f4a759.jpg',
+    'photo-1532009324734-20a7a5813719.jpg',
+    'photo-1524429656589-6633a470097c.jpg',
+    'photo-1530224264768-7ff8c1789d79.jpg',
+    'photo-1564135624576-c5c88640f235.jpg',
+    'photo-1541698444083-023c97d3f4b6.jpg',
+    'photo-1522364723953-452d3431c267.jpg',
+    'photo-1513938709626-033611b8cc03.jpg',
+    'photo-1507143550189-fed454f93097.jpg',
+    'photo-1493976040374-85c8e12f0c0e.jpg',
+    'photo-1504198453319-5ce911bafcde.jpg',
+    'photo-1530122037265-a5f1f91d3b99.jpg',
+    'photo-1516972810927-80185027ca84.jpg',
+    'photo-1550439062-609e1531270e.jpg',
+    'photo-1549692520-acc6669e2f0c.jpg'
+]
+
+t1 = time.perf_counter()
+
+size = (1200, 1200)
+
+
+def process_image(img_name):
+    img = Image.open(img_name)
+
+    img = img.filter(ImageFilter.GaussianBlur(15))
+
+    img.thumbnail(size)
+    img.save(f'processed/{img_name}')
+    print(f'{img_name} was processed...')
+
+
+with concurrent.futures.ProcessPoolExecutor() as executor:
+    executor.map(process_image, img_names)
+
+
+t2 = time.perf_counter()
+
+print(f'Finished in {t2-t1} seconds')
+
+
+#Repr, a more accurate representation of strings and other objects. Useful for debugging. 
+#Works a bit like a combination of str & type
+import datetime
+
+datum=datetime.date(2016, 4, 2)
+
+str(datum)
+repr(datum)
+
+#Code snippet. Run python from powerShell 
+#C:\Python> .\python.exe "C:\Py\Learn1\multiProcess.py"
