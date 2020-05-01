@@ -1,0 +1,48 @@
+
+git remote -v # Check the remote 
+git remote rm origin #Removes the origin 
+git remote add origin https://github.com/MartinTropse/moveIt.git #add the specified url as remote 
+
+git status #Shows the status of files, untracked / tracked 
+git add . #Add all changes in the directory to staged 
+git rm --cached fileName #remove file from staged
+git commit -m "update text" #commit all staged files 
+git branch -a #Shows all branches, local and remote 
+git branch -d branchName #Deletes the branch named, but only work for local branches.
+git branch newBranch #Creates a new branch
+git checkout newBranch #Switch to another branch 
+git push origin newBranch 
+git push -u origin master #necessary when you add the original local dir to the remote first time... ? 
+git pull
+
+git merge newBranch # Looks like this has to be executed on the master branch
+
+#Difference between two branches wont be visable until the change is commited. 
+
+git clone https://github.com/MartinTropse/moveIt.git # will clone that repository to your cwd
+#You can also download it as zip-file from webpage
+
+#gitignore 
+/folderName #ignores that folder
+myFile.txt #ignores specified file
+*.txt 3 #ignores all text files
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Remote is created by default when cloning a repo 
+
+$HOME/.gitconfig is global config for git.
+There are three levels of config files.
