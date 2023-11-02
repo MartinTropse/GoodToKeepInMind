@@ -122,9 +122,19 @@ With boolean indexing or logical selection, you pass an array or Series of
 True/False values to the .loc indexer to select the rows where your Series
  has True values.
 
+ Two ways to locate row positions using regex or multiple string options (and potentially retrive an index value)
+
+
+
 '''
 data.loc(['Ola', 'Lars'])
 data.loc[487]#This will return the index called 487, NOT the 487 row
+
+anID=list(df.iloc[colID,0].str.match(r"Analys.+"))
+indxNum=df.iloc[anID,0].index.to_numpy()[0]
+
+rowMatch = df.loc[df['Provnummer: 177-2022-04290854'].isin(['Analys', 'Analys ']), :]
+
 
 #Very short for replacing a value in a specific position
 df.iat[0,0] = "NewThing"
@@ -132,6 +142,8 @@ df.at['rowindex', 'columnindex'] = "NewThing"
 
 #Takes a random subset of the dataframe.
 sample_red_cof=coffee_red.sample(200)
+
+
 
 '''
 #####.loc######
